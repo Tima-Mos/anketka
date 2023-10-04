@@ -11,20 +11,18 @@ function App() {
         {id:2, title:'шлёк', body:'впрврвар'},
         {id:3, title:'попочки', body:'писечки'},
     ])
-    const [curencys, setcurency] = useState([
+    const [curencys1, setcurency1] = useState([
         {id:1, name:'RUB'},
         {id:2, name:'EUR'},
         {id:3, name:'USD'},
+        {id:4, name:'JPY'},
+        {id:5, name:'GBP'},
+        {id:6, name:'AUD'},
     ])
-    const [resp, setResp] = useState();
-    async function changeCurency(){
-        const responce = await axios.get('')
-        console.log(responce.data)
-    }
 
   return (
     <div className="App">
-        <Convert curencys = {curencys}/>
+        <Convert curencys = {curencys1}/>
     </div>
   );
 }
