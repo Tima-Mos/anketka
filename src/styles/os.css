@@ -1,0 +1,64 @@
+.textArea{
+    margin-top: 10px;
+    height: 600px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.input{
+    width: 300px;
+}
+
+.cols{
+    padding: 0;
+    margin: 0;
+}
+
+.right-col{
+margin-left: 100px;
+}
+
+.left-col{
+    margin-right: 100px;
+}
+
+.row{
+    margin-top: 10px;
+}
+
+.top-selects {
+    margin-top: 10px;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.select-left{
+    margin-right: 100px;
+}
+
+.select-right{
+    margin-left: 100px;
+}
+
+.input-group{
+    display: flex;
+    justify-content: space-between;
+}
+
+.right-inputs{
+    text-align: end;
+}
+
+.button{
+    margin-top: 20px;
+}
+
+.result-textArea{
+    margin-top: 20px;
+}
+
+.text-input{
+    height: 25px;
+    width: 110px;
+}

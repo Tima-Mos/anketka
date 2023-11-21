@@ -1,9 +1,11 @@
 import React, {useState} from "react";
 import './styles/App.css'
-import './styles/Convert.css'
+import './styles/os.css'
 import PostItem from "./components/PostItem";
 import PostList from "./components/PostList";
 import Convert from "./components/Convert";
+import Os from "./components/Os"
+import Lab5 from "./components/Lab5"
 import axios from "axios";
 function App() {
     const [posts, setPosts] = useState([
@@ -11,7 +13,7 @@ function App() {
         {id:2, title:'шлёк', body:'впрврвар'},
         {id:3, title:'попочки', body:'писечки'},
     ])
-    const [curencys1, setcurency1] = useState([
+    const [curencys, setcurency1] = useState([
         {id:1, name:'RUB'},
         {id:2, name:'EUR'},
         {id:3, name:'USD'},
@@ -22,7 +24,7 @@ function App() {
 
   return (
     <div className="App">
-        <Convert curencys = {curencys1}/>
+        <Lab5/>
     </div>
   );
 }
