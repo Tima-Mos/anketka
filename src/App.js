@@ -24,7 +24,7 @@ function App() {
 
   return (
     <div className="App">
-        <Lab5/>
+        <Os/>
     </div>
   );
 }

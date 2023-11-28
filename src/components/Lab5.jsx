@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import {Container} from "react-bootstrap";
@@ -7,93 +7,107 @@ import Col from 'react-bootstrap/Col';
 import Button from "react-bootstrap/Button";
 
 const Lab5 = () => {
+    const grammar = {
+        Q: [
+            ['a', 'c', 'A'],
+            ['a', 'c', 'B'],
+            ['ε']
+        ],
+        A: [
+            ['A', 'a'],
+            ['A', 'b'],
+            ['a']
+        ],
+        B: [
+            // ['A'],
+            ['C', 'b'],
+            ['ε']
+        ],
+        C: [
+            ['d', 'C', 'c']
+            // Add more number productions if needed
+            // G=([Q, A, B, C, D], [a, b, c], P, Q)
+            //                           <br/>1. Q->acA|acB|ε
+            //                           <br/>2. A->Aa|Ab|a
+            //                           <br/>3. B->A|Cb|ε
+            //                           <br/>4. C->dCc
+            //                           <br/>5. D->dc
+            // проверяй сперва весь стек, потом уберай по символу из начала, что бы парсер
+            // пытался свернуть функцию сразу полностью а не по одной букве за раз
+        ],
+        D: [
+            ['d', 'c']
+        ],
+    };
+
+    let inputString = ""
+    let stac = ""
+    let corections = 1
+    let temp = ""
+    let result = ""
+    const [stringValue, setStringValueValue] = useState("");
+    const [inputField, setInputField] = useState("");
     function parceGrammar(){
-        // Define the context-free grammar (CFG)
-        const grammar = {
-            expression: [
-                ['term', '+', 'expression'],
-                ['term']
-            ],
-            term: [
-                ['factor', '*', 'term'],
-                ['factor']
-            ],
-            factor: [
-                ['(', 'expression', ')'],
-                ['number']
-            ],
-            number: [
-                ['0'],
-                ['1'],
-                ['2'],
-                // Add more number productions if needed
-            ]
-        };
+        inputString = inputField
+        stac = ""
+        corections = 1
+        temp = ""
+        result = ""
+        result += `\nначальный инпут: ${inputString}\n`
+        for (let i = inputString.length-1; i > -1; i-- ){
+            stac = stac + inputString[0];
+            inputString = inputString.slice(1);
+            if (inputString.length<1) {
+                temp = stac
+            } else {
+                temp = stac.slice(1)
+            }
 
-// Function to parse a string using the CFG
-        function parseString(input) {
-            const tokens = input.split(' ');
-            let index = 0;
-
-            // Function to parse a nonterminal symbol
-            function parseNonterminal(nonterminal) {
-                const productions = grammar[nonterminal];
-
-                for (let production of productions) {
-                    let success = true;
-                    let children = [];
-
-                    for (let symbol of production) {
-                        if (grammar[symbol]) {
-                            // Symbol is a nonterminal, recursively parse it
-                            const result = parseNonterminal(symbol);
-                            if (result.success) {
-                                children.push(result.tree);
-                            } else {
-                                success = false;
-                                break;
-                            }
-                        } else {
-                            // Symbol is a terminal, match it with the input tokens
-                            if (tokens[index] === symbol) {
-                                children.push(tokens[index]);
-                                index++;
-                            } else {
-                                success = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (success) {
-                        return { success: true, tree: { [nonterminal]: children } };
+            console.log(`стак в данный момент: ${stac}`)
+            console.log(`инпут: ${inputString}`)
+            result += `\nинпут: ${inputString}\nстак: ${stac}`
+            if (stac === "a"){
+                continue
+            }
+            corections = 1;
+            while (corections>0 || temp !== "") {
+                if (corections === 0){
+                    temp = temp.slice(1);
+                } else {
+                    if (inputString.length<1) {
+                        temp = stac
+                    } else {
+                        temp = stac.slice(1)
                     }
                 }
+                corections = 0;
+                for (const [key, value] of Object.entries(grammar)) {
+                    //console.log(`${key}: ${value}`);
+                    value.forEach(function (item, i, arr) {
+                        //console.log(item.join(''))
+                        if (temp === item.join('')) {
+                            corections++;
+                            console.log(`${temp} -> ${key}`)
+                            result += `\nсвертка: ${temp} -> ${key}`
+                            stac = stac.slice(0, stac.length - temp.length)
+                            temp = key.toString()
+                            stac = stac + temp
+                            console.log(`стак в данный момент: ${stac}`)
+                            result += `\nстак: ${stac}`
 
-                return { success: false };
-            }
-
-            // Start with the start symbol 'expression'
-            const result = parseNonterminal('expression');
-
-            if (result.success && index === tokens.length) {
-                return result.tree;
-            } else {
-                throw new Error('Invalid input string');
+                        }
+                    })
+                }
             }
         }
-
-// Example usage
-        const inputString = '2 + 3 * (4 + 5)';
-        const parseTree = parseString(inputString);
-        console.log(parseTree);
+        setStringValueValue(result);
     }
     return (
         <div>
           <Container>
               <Row>
                   <Col style={{backgroundColor: "white", borderRadius: "0.375rem"}}>
-                      <p>
+                      <p style={{fontSize: "1.25rem"}}>
                           G=([Q, A, B, C, D], [a, b, c], P, Q)
                           <br/>1. Q->acA|acB|ε;
                           <br/>2. B->A|Cb|ε;
@@ -108,14 +122,24 @@ const Lab5 = () => {
                               aria-label="Large"
                               aria-describedby="inputGroup-sizing-sm"
                               placeholder="Введите строчку"
+                              onChange={event => setInputField(event.target.value)}
                           />
                       </InputGroup>
                       <Button onClick={parceGrammar} variant="primary" size="md" style={{marginTop:"10px"}} >
                           Разложить
                       </Button>
-                      <div style={{backgroundColor: "white", borderRadius: "0.375rem", marginTop:"10px"}}>
-                          Popka
-                      </div>
+                      {/*<div style={{backgroundColor: "white", borderRadius: "0.375rem", marginTop:"10px"}} >*/}
+                      {/*    {stringValue}*/}
+                      {/*</div>*/}
+                      <InputGroup size="lg">
+                          <Form.Control as="textarea"
+                                        aria-label="Large"
+                                        aria-describedby="inputGroup-sizing-sm"
+                                        value={stringValue}
+                                        readOnly={true}
+
+                          />
+                      </InputGroup>
 
                   </Col>
               </Row>
