@@ -6,20 +6,37 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import PostItem from "./PostItem";
 import {Container} from "react-bootstrap";
+import {
+    BrowserRouter,
+    createBrowserRouter,
+    Route,
+    RouterProvider,
+    Routes,
+    Link,
+    Outlet,
+    useNavigate
+} from "react-router-dom";
 
-const os = () => {
+
+const Os = ({updateMap, resultString}) => {
+
+    const navigate = useNavigate()
+
 
 
     return (
         <div>
-
-
-            {/*два селекта дял скрипта ОС и языка ОС*/}
+            {/*два селекта для скрипта ОС и языка ОС*/}
             <div className="top-selects">
                 <Form.Select
                     aria-label="Default select example"
-                    className="select-left">
-                    <option>Выберите скрипт</option>
+                    className="select-left"
+                    onChange={event => navigate(event.target.value)}
+                >
+                    <option value={'script1'}>script1</option>
+                    <option value={'script2'}>script2</option>
+                    <option value={'script4'}>script4</option>
+
                 </Form.Select>
                 <Form.Select
                     aria-label="Default select example"
@@ -32,11 +49,25 @@ const os = () => {
                 <Container>
                     <Row >
                         <Col  className="cols left-col">
+                            <InputGroup size="lg" className="single-col">
+                                <Form.Control
+                                    aria-label="Large"
+                                    aria-describedby="inputGroup-sizing-sm"
+                                    placeholder="Ваше Имя"
+                                    onChange={event => updateMap("yourName" ,event.target.value)}
+                                />
+                            </InputGroup>
+                        </Col>
+
+                    </Row>
+                    <Row >
+                        <Col  className="cols left-col">
                             <InputGroup size="lg" >
                                 <Form.Control
-                                              aria-label="Large"
-                                              aria-describedby="inputGroup-sizing-sm"
-                                              placeholder="Имя ребёнка"
+                                    aria-label="Large"
+                                    aria-describedby="inputGroup-sizing-sm"
+                                    placeholder="Имя ребёнка"
+                                    onChange={event => updateMap("childName" ,event.target.value)}
                                 />
                             </InputGroup>
                         </Col>
@@ -44,8 +75,10 @@ const os = () => {
                             <InputGroup size="lg" >
                                 <Form.Select
                                     aria-label="Default select example"
-                                     >
-                                    <option>Выберите пол ребёнка</option>
+                                    onChange={event => updateMap("childGender" ,event.target.value)}
+                                >
+                                    <option>Мальчик</option>
+                                    <option>Девочка</option>
                                 </Form.Select>
                             </InputGroup>
                         </Col>
@@ -54,9 +87,10 @@ const os = () => {
                         <Col className="cols left-col">
                             <InputGroup size="lg" >
                                 <Form.Control
-                                              aria-label="Large"
-                                              aria-describedby="inputGroup-sizing-sm"
-                                              placeholder=""
+                                    aria-label="Large"
+                                    aria-describedby="inputGroup-sizing-sm"
+                                    placeholder="Имя родителя"
+                                    onChange={event => updateMap("parentName" ,event.target.value)}
                                 />
                             </InputGroup>
                         </Col>
@@ -64,8 +98,12 @@ const os = () => {
                             <InputGroup size="lg" >
                                 <Form.Select
                                     aria-label="Default select example"
+                                    onChange={event => updateMap("subject" ,event.target.value)}
                                 >
                                     <option>Выберите предмет</option>
+                                    <option>Python</option>
+                                    <option>Unity</option>
+                                    <option>Scratch</option>
                                 </Form.Select>
                             </InputGroup>
                         </Col>
@@ -76,29 +114,9 @@ const os = () => {
             {/*больше поле для просмотра результата
             и редактирования дял результата*/}
             <div className="textArea">
-                <form>
-                    Добрый день,
-                    <input className="text-input" type="text" id="name" placeholder="Имя родителя"/>!
-                    <br/> связи <input className="text-input" type="text" id="name" placeholder="Ваше имя"/>, я преподаватель (предмета) школы RTS.
-                    <br/> Хочу поделиться успехами (Имя ребенка) на уроках.
-                    <br/>Мы провели 4 урока и (Имя ребенка) научился/лась _________.
-
-                    У _________ хорошо получается _________.
-                    <br/><br/><input type="checkbox" id="" name=""/>Также он/а очень внимателен/а и старателен/а.
-                    <br/><input type="checkbox" id="" name=""/>Также он/а очень творчески подходит к заданиям и не боится экспериментировать.
-                    <br/><input type="checkbox" id="" name=""/>Также он/а отлично работает самостоятельно.
-                    <br/><br/><input type="checkbox" id="" name=""/>Есть несколько моментов, на которые (Имя ученика) нужно обратить больше внимания:
-                    <br/><input type="checkbox" id="" name=""/>	тема ______ далась сложнее остальных, нам нужно уделить ей больше внимания
-                    <br/><input type="checkbox" id="" name=""/>	______ испытывает сложности с изучением некоторых тем. Рекомендую ______.
-                    <br/><input type="checkbox" id="" name=""/>	домашнее задание: _____ не всегда выполняет его, а без закрепления материала он может очень быстро забываться.
-                    <br/><input type="checkbox" id="" name=""/>	______ иногда позже подключается к уроку, из-за чего мы не всегда успеваем полноценно провести урок, это может влиять на эффективность обучения.
-                    <br/><br/>(Имя ученика) всегда активен/а на уроках,чувствуется, что ей/ему нравится заниматься
-                    <br/>На следующих занятиях мы хотим сделать упор на _________.
-                    Есть ли у вас какие-то вопросы или пожелания по нашим занятиям?
-
-
-
-                </form>
+                <div id="detail">
+                    <Outlet />
+                </div>
             </div>
 
             {/*кнопка генерации текста*/}
@@ -110,11 +128,13 @@ const os = () => {
 
 
             {/*текстареа для результата*/}
-            <div className="result-textArea">
+            <div>
                 <InputGroup size="lg">
-                    <Form.Control as="textarea"
+                    <Form.Control
                                   aria-label="Large"
                                   aria-describedby="inputGroup-sizing-sm"
+                                  value={resultString}
+                                  readOnly={true}
 
                     />
                 </InputGroup>
@@ -123,4 +143,4 @@ const os = () => {
     );
 };
 
-export default os;
+export default Os;
