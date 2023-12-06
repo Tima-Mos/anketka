@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
@@ -21,6 +21,11 @@ import {
 const Os = ({updateMap, resultString}) => {
 
     const navigate = useNavigate()
+    const resultInput = useRef()
+
+    function insertResult(){
+        resultInput.current.value = resultString
+    }
 
 
 
@@ -121,7 +126,7 @@ const Os = ({updateMap, resultString}) => {
 
             {/*кнопка генерации текста*/}
             <div className="d-grid gap-2 button">
-                <Button  variant="primary" size="lg"  >
+                <Button  variant="primary" size="lg" onClick={insertResult} >
                     Сгенерировать
                 </Button>
             </div>
@@ -133,7 +138,7 @@ const Os = ({updateMap, resultString}) => {
                     <Form.Control as="textarea"
                                   aria-label="Large"
                                   aria-describedby="inputGroup-sizing-sm"
-                                  value={resultString}
+                                  ref={resultInput}
                                   style={{minHeight: '860px', marginTop:"20px"}}
 
                     />
