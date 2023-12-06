@@ -4,7 +4,6 @@ import {getGenitiveCase} from "../Functions/GetGenetiveCase"
 
 const Script1 = ({parentName, yourName, subject, childName, childGender, updateResult}) => {
 
-    console.log(textPush())
     function textPush(){
         return `Добрый день, ${parentName}!\n
             На связи ${yourName} , я преподаватель ${subject} школы RTS.\n\n
@@ -40,7 +39,7 @@ const Script1 = ({parentName, yourName, subject, childName, childGender, updateR
             <br/>На следующем модуле мы будем создавать (проект след. модуля).
 
             <br/><br/>Есть ли у вас какие-то вопросы или комментарии по нашим занятиям?
-            <Button onClick={textPush}>запущить скрипт</Button>
+            <Button onClick={() => updateResult(textPush())}>запущить скрипт</Button>
 
         </div>
     );

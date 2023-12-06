@@ -130,11 +130,11 @@ const Os = ({updateMap, resultString}) => {
             {/*текстареа для результата*/}
             <div>
                 <InputGroup size="lg">
-                    <Form.Control
+                    <Form.Control as="textarea"
                                   aria-label="Large"
                                   aria-describedby="inputGroup-sizing-sm"
                                   value={resultString}
-                                  readOnly={true}
+                                  style={{minHeight: '860px', marginTop:"20px"}}
 
                     />
                 </InputGroup>
